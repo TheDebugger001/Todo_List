@@ -2,10 +2,11 @@
 const express = require("express")
 const router = express.Router()
 
-const {
-  registerUser
- } = require("../controllers/user.controllers")
+const { registerUser, loginUser, Homepage } = require("../controllers/user.controllers")
+const { UserAuth, UserValidation } = require("../middleware/user.middleware")
 
 // * This is the post routes
-router.post("/register", registerUser)
-router.post("/login", loginUser)
+router.post("/register", UserValidation, registerUser)
+router.post("/login", UserValidation, loginUser)
+
+router.get("/home", UserAuth, Homepage)

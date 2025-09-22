@@ -82,3 +82,7 @@ exports.loginUser = async(req, res) => {
     res.status(501).json({ message: "Server error", error })
   }
 }
+
+exports.Homepage = async (req, res) => {
+  res.send("Hiiii bro, you are in the homepage now")
+}

@@ -1,6 +1,6 @@
 
 const jwt = require("jsonwebtoken")
-const { body, validationResult } = require("express-validator")
+const { body, validationResult, header } = require("express-validator")
 
 const UserValidation = [
   body("username")
@@ -20,10 +20,27 @@ const UserValidation = [
 ]
 
 
-//  TODO: I'll have to finish authentication of the users this day, on 22/ September /2025
-// ! FIXME: This mission has failed now so
+const UserAuth = async (req, res, next) => {
 
+  try {
+
+    const authHeader = req.headers["authorization"];
+    const headerToken = authHeader && authHeader.split(" ")[1];
+
+    if (!headerToken) return res.status(401).json({ message: "No Token provided"})
+
+    const decode = jwt.verify(headerToken, process.env.JWT_SECRET_KEY)
+
+    req.user = decode
+    next()
+
+  }catch (error) {
+    return res.status(401).json({ message: "Unauthorized user"})
+  }
+  
+}
 
 module.exports = {
-  UserValidation
+  UserValidation,
+  UserAuth
 }
